@@ -1,14 +1,14 @@
 import { useState } from "react";
-import CourseGoal from "./components/CourseGoal";
 import Header from "./components/Header";
+import CourseGoalList from "./components/CourseGoalList";
+
+export type Goal = {
+  title: string;
+  description: string;
+  id: number;
+};
 
 export default function App() {
-  type Goal = {
-    title: string;
-    description: string;
-    id: number;
-  };
-
   const [goals, setGoals] = useState<Goal[]>([]);
 
   const addGoalHandler = () => {
@@ -22,21 +22,17 @@ export default function App() {
     });
   };
 
+  const deleteGoalHandler = (id: number) => {
+    setGoals((prev) => prev.filter((g) => g.id !== id));
+  };
+
   return (
     <main>
       <Header image={{ src: "/goals.jpg", alt: "Set your goals" }}>
         <h1>My Goals</h1>
       </Header>
       <button onClick={addGoalHandler}>Add Goal</button>
-      <ul>
-        {goals.map((goal) => (
-          <li>
-            <CourseGoal title={goal.title}>
-              <p>{goal.description}</p>
-            </CourseGoal>
-          </li>
-        ))}
-      </ul>
+      <CourseGoalList goals={goals} deleteGoal={deleteGoalHandler} />
     </main>
   );
 }
